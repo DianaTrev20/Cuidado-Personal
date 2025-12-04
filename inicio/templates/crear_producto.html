@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Producto</title>
+</head>
+<body>
+    <h1>Registrar nuevo Producto</h1>
+
+    <!-- action indica a que ruta envia los datos este formulario -->
+    <form method="POST" action="{% url 'crear_producto' %}">
+        <!-- Esta linea hace que los datos se envien de forma segura -->
+        {% csrf_token %}
+
+        <!-- Renderizar el formulario automáticamente -->
+        {{ form.as_p }}
+
+
+        
+        <button type="submit">Guardar</button>
+    </form>
+
+</body>
+</html>

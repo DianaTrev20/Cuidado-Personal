@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Producto</title>
+</head>
+<body>
+    <h1>Registrar inventario</h1>
+
+    <!-- action indica a que ruta envia los datos este formulario -->
+    <form method="POST" action="{% url 'registrar_inventario' %}">
+        <!-- Esta linea hace que los datos se envien de forma segura -->
+        {% csrf_token %}
+
+        <!-- Renderizar el formulario automáticamente -->
+        {{ form.as_p }}
+
+
+        
+        <button type="submit">Guardar</button>
+    </form>
+
+</body>
+</html>

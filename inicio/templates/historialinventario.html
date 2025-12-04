@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Historial de inventario de: {{ historial.0.producto.nombre }}</h1>
+
+
+    {% for item in historial %}
+
+    <div>
+    
+        
+        <p>Stock: {{ item.stock }}</p>
+
+        <p>Fecha: {{ item.fecha }}</p>
+
+        
+    </div>
+
+
+    
+    {% endfor %}
+    
+</body>
+</html>

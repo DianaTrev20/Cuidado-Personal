@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div>
+            <img src="{{ producto.imagen }}" alt="">
+        
+            <p>Nombre: {{ producto.nombre }}</p>
+            <p>Precio: {{ producto.precio.precio }}</p>
+
+            <p>Departamento: {{ producto.departamento.nombre }}</p>
+
+            
+
+            <p>Proveedor: {{  producto.proveedor.nombre }}</p>
+
+            <a href="http://localhost:8000/historialinventario/producto/{{ producto.id }}">Consulta el stock historial del inventario de este producto</a>
+        </div>
+    
+</body>
+</html>
