@@ -1,0 +1,58 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-5">
+                
+                <h3 class="text-center mb-4 fw-bold">¡Hola! Para seguir, ingresa tu usuario</h3>
+
+                {% if form.errors %}
+                    <div class="alert alert-danger small">
+                        Usuario o contraseña incorrectos. Revisa los datos.
+                    </div>
+                {% endif %}
+                
+                {% if next %}
+                    {% if user.is_authenticated %}
+                        <div class="alert alert-warning small">
+                            Tu cuenta no tiene permiso para ver esta página.
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info small">
+                            Por favor, inicia sesión para continuar.
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <form method="post" action="{% url 'login' %}">
+                    
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Usuario</label>
+                        <input type="text" name="username" class="form-control form-control-lg" required id="id_username" autofocus>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-muted">Contraseña</label>
+                        <input type="password" name="password" class="form-control form-control-lg" required id="id_password">
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Continuar</button>
+                    </div>
+                    
+                    <input type="hidden" name="next" value="{{ next }}" />
+                </form>
+
+            </div>
+            <div class="card-footer bg-white text-center py-3 border-0">
+                <small class="text-muted">¿Eres nuevo? Pide al administrador que te registre.</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

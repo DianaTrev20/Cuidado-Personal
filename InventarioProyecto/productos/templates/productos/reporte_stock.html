@@ -1,0 +1,142 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+
+<style>
+    .kpi-card { border-left: 5px solid; transition: transform 0.2s; }
+    .kpi-card:hover { transform: translateY(-3px); }
+    .card-total { border-color: #0d6efd; background-color: #f8f9fa; }
+    .card-money { border-color: #198754; background-color: #f8f9fa; }
+    .card-alert { border-color: #dc3545; background-color: #fff5f5; }
+
+    @media print {
+        .no-print { display: none !important; }
+        .mercado-nav { display: none !important; }
+        footer { display: none !important; }
+        body { background-color: white !important; }
+        .container { max-width: 100% !important; width: 100% !important; }
+        .card { border: 1px solid #ddd !important; }
+        .bg-primary { background-color: #0d6efd !important; color: white !important; -webkit-print-color-adjust: exact; }
+        .bg-dark { background-color: #212529 !important; color: white !important; -webkit-print-color-adjust: exact; }
+    }
+</style>
+
+<div class="container py-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h1 class="fw-bold text-uppercase">Reporte Inteligente <i class="bi bi-stars text-warning"></i></h1>
+            <p class="text-muted mb-0">Generado el: {{ fecha_hoy|date:"d M Y - H:i" }}</p>
+            <p class="text-muted">Analista: <strong>{{ user.username }}</strong></p>
+        </div>
+        <div class="text-end no-print">
+            <button onclick="window.print()" class="btn btn-dark btn-lg">
+                <i class="bi bi-printer-fill"></i> Imprimir PDF
+            </button>
+            <a href="{% url 'producto_list' %}" class="btn btn-outline-secondary btn-lg">Volver</a>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm kpi-card card-total">
+                <h6 class="text-muted text-uppercase">Total Productos</h6>
+                <h2 class="fw-bold">{{ total_productos }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm kpi-card card-money">
+                <h6 class="text-muted text-uppercase">Valor Inventario</h6>
+                <h2 class="fw-bold text-success">${{ valor_total_inventario }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm kpi-card card-alert">
+                <h6 class="text-muted text-uppercase">Alertas Stock Bajo</h6>
+                <h2 class="fw-bold text-danger">{{ cantidad_bajos }}</h2>
+                <small class="text-danger">Requieren reabastecimiento</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-striped table-hover mb-0" style="font-size: 0.85rem;">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Producto</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-end">Precio Actual</th>
+                        <th class="text-center bg-primary border-0 text-white">
+                            <i class="bi bi-cpu"></i> IA: Agotamiento
+                        </th>
+                        <th class="text-center bg-dark border-0 text-white">
+                            <i class="bi bi-graph-up-arrow"></i> IA: Precios
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                    <tr>
+                        <td class="fw-bold">{{ producto.nombre }}</td>
+                        
+                        <td class="text-center fs-5">
+                            {{ producto.stock_actual }}
+                        </td>
+                        
+                        <td class="text-end">${{ producto.precio }}</td>
+
+                        <td class="text-center">
+                            {% if producto.stock_actual == 0 %}
+                                <span class="badge bg-secondary">AGOTADO</span>
+                            {% else %}
+                                <div class="d-flex flex-column align-items-center">
+                                    <small class="text-primary fw-bold">
+                                        {{ producto.ia_fecha_agotamiento|date:"d M Y" }}
+                                    </small>
+                                </div>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-center">
+                            {% if producto.stock_actual == 0 %}
+                                <span class="text-muted">--</span>
+                            {% else %}
+                                <div class="d-flex flex-column align-items-center">
+                                    {% if producto.ia_sugerencia == "SUBIR" %}
+                                        <span class="badge bg-success mb-1">
+                                            <i class="bi bi-arrow-up-circle"></i> SUBIR PRECIO
+                                        </span>
+                                        <small class="fw-bold text-success">Sugerido: ${{ producto.ia_precio_sugerido|floatformat:2 }}</small>
+                                        
+                                    {% elif producto.ia_sugerencia == "OFERTA" %}
+                                        <span class="badge bg-warning text-dark mb-1">
+                                            <i class="bi bi-percent"></i> OFERTA
+                                        </span>
+                                        <small class="fw-bold text-dark">Sugerido: ${{ producto.ia_precio_sugerido|floatformat:2 }}</small>
+
+                                    {% else %}
+                                        <span class="badge bg-light text-dark border">
+                                            <i class="bi bi-check-circle"></i> MANTENER
+                                        </span>
+                                    {% endif %}
+                                    
+                                    <small class="text-muted fst-italic" style="font-size: 0.7rem;">
+                                        {{ producto.ia_motivo }}
+                                    </small>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4">No hay datos</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

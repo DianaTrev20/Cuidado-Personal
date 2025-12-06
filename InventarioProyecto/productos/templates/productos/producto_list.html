@@ -1,0 +1,57 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Basado en tu última visita</h3>
+    <a href="{% url 'producto_create' %}" class="btn btn-primary">Publicar nuevo producto</a>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for producto in productos %}
+    <div class="col">
+        <div class="card h-100 card-product p-0">
+            
+            <div style="height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" style="object-fit: contain; max-height: 100%; max-width: 100%;">
+                {% else %}
+                    <div class="text-muted text-center">
+                        <i class="bi bi-camera" style="font-size: 2rem;"></i>
+                        <p class="small m-0">Sin foto</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="card-body border-top">
+                <h5 class="price-tag mb-1">${{ producto.precio }}</h5>
+                
+                {% if producto.stock_actual <= producto.stock_minimo %}
+                    <span class="badge bg-danger mb-2">¡Pocas unidades!</span>
+                {% endif %}
+
+                <p class="card-text text-muted small mb-2">{{ producto.nombre }}</p>
+                
+                <p class="text-success small mb-0">Disponibles: {{ producto.stock_actual }}</p>
+            </div>
+            
+            <div class="card-footer bg-white border-0 d-grid gap-2">
+                <a href="{% url 'producto_detail' producto.pk %}" class="btn btn-outline-primary btn-sm">Ver detalle</a>
+                
+                {% if producto.stock_actual > 0 %}
+                    <a href="{% url 'producto_comprar' producto.pk %}" class="btn btn-primary btn-sm">Comprar ahora</a>
+                {% else %}
+                    <button class="btn btn-secondary btn-sm" disabled>Agotado</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <h4 class="text-muted">No hay publicaciones todavía.</h4>
+        <p>¡Sé el primero en vender algo!</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <div class="d-flex align-items-center">
+                    <div class="bg-light p-3 rounded-circle me-3">
+                        <i class="bi bi-truck fs-3 text-dark"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-muted mb-0 small text-uppercase">Ficha de Proveedor</h5>
+                        <h1 class="fw-bold mb-0">{{ proveedor.nombre }}</h1>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="text-muted small text-uppercase fw-bold">Nombre de Contacto</label>
+                        <p class="fs-5"><i class="bi bi-person-badge me-2"></i> {{ proveedor.contacto_nombre|default:"No especificado" }}</p>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="text-muted small text-uppercase fw-bold">Teléfono</label>
+                        <p class="fs-5"><i class="bi bi-telephone me-2"></i> {{ proveedor.telefono|default:"No especificado" }}</p>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="text-muted small text-uppercase fw-bold">Correo Electrónico</label>
+                        <p class="fs-5"><i class="bi bi-envelope me-2"></i> 
+                            {% if proveedor.email %}
+                                <a href="mailto:{{ proveedor.email }}" class="text-decoration-none">{{ proveedor.email }}</a>
+                            {% else %}
+                                No especificado
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="text-muted small text-uppercase fw-bold">Dirección Física</label>
+                        <div class="p-3 bg-light rounded border">
+                            <i class="bi bi-geo-alt me-2 text-danger"></i> 
+                            {{ proveedor.direccion|default:"Sin dirección registrada."|linebreaksbr }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white p-3 border-top-0 d-flex justify-content-between">
+                <a href="{% url 'proveedor_list' %}" class="btn btn-outline-secondary">
+                    &larr; Volver a la lista
+                </a>
+                <div>
+                    <a href="{% url 'proveedor_update' proveedor.pk %}" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="{% url 'proveedor_delete' proveedor.pk %}" class="btn btn-outline-danger ms-2">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

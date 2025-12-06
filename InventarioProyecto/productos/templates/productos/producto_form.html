@@ -1,0 +1,35 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                
+                {% if form.instance.pk %}
+                    <h2 class="mb-4">Editar Producto ✏️</h2>
+                {% else %}
+                    <h2 class="mb-4">Vender Nuevo Producto 📦</h2>
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.as_p }}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Guardar Publicación</button>
+                        
+                        <a href="{% url 'producto_list' %}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

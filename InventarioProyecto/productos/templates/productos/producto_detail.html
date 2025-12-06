@@ -1,0 +1,57 @@
+{% extends 'productos/base.html' %}
+
+{% block content %}
+
+<div class="card shadow-sm mt-3">
+    <div class="row g-0">
+        
+        <div class="col-md-7 border-end bg-white d-flex align-items-center justify-content-center p-5">
+             <div style="max-height: 500px; width: 100%; display: flex; align-items: center; justify-content: center;">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid" style="max-height: 400px;">
+                {% else %}
+                    <div class="text-center text-muted">
+                        <i class="bi bi-camera" style="font-size: 5rem;"></i>
+                        <p>Sin imagen</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-5 p-4 bg-white">
+            <span class="text-muted small">Nuevo | {{ producto.stock_actual }} disponibles</span>
+            
+            <h1 class="fw-bold fs-4 mt-2 mb-3">{{ producto.nombre }}</h1>
+            
+            <div class="fs-1 fw-light mb-3">$ {{ producto.precio }}</div>
+
+            <p class="mb-1 fw-bold">Lo que tienes que saber de este producto:</p>
+            <ul class="text-muted small mb-4">
+                <li>Categoría: {{ producto.categoria.nombre }}</li>
+                <li>Proveedor: {{ producto.proveedor.nombre|default:"Genérico" }}</li>
+                <li>Stock Mínimo Alerta: {{ producto.stock_minimo }}</li>
+            </ul>
+
+            <p class="fw-bold">Descripción</p>
+            <p class="text-muted small mb-5">{{ producto.descripcion|default:"El vendedor no incluyó una descripción." }}</p>
+
+            <div class="d-grid gap-2">
+                {% if producto.stock_actual > 0 %}
+                    <a href="{% url 'producto_comprar' producto.pk %}" class="btn btn-primary btn-lg">Comprar ahora</a>
+                {% else %}
+                    <button class="btn btn-secondary btn-lg" disabled>Agotado</button>
+                {% endif %}
+                
+                <a href="{% url 'producto_list' %}" class="btn btn-outline-primary">Volver al listado</a>
+            </div>
+
+            <div class="mt-5 pt-3 border-top text-center">
+                <small class="text-muted">Administrar publicación:</small><br>
+                <a href="{% url 'producto_update' producto.pk %}" class="text-decoration-none me-3">Editar</a>
+                <a href="{% url 'producto_delete' producto.pk %}" class="text-decoration-none text-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
